@@ -1,16 +1,11 @@
 import Header from "./Components/Header"
 import Body from './Components/Body';
 import Footer from "./Components/Footer";
-import LoginModal from "./Components/LoginModal";
-import { useContext } from "react";
-import AuthContext from "./Components/AuthContext";
 const App = () => {
-  const {showModal} = useContext(AuthContext);
   return (
-    <div className='Applayout'>
+    <div className='Applayout w-full'>
       <Header/>
       <Body/>
-      {showModal && <LoginModal />}
       <Footer/>
       
     </div>
