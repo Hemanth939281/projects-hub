@@ -3,7 +3,7 @@ import Body from './Components/Body';
 import Footer from "./Components/Footer";
 const App = () => {
   return (
-    <div className='Applayout w-full'>
+    <div className='Applayout overflow-x-hidden'>
       <Header/>
       <Body/>
       <Footer/>
