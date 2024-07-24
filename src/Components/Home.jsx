@@ -9,8 +9,8 @@ const Home = () => {
     <>
     <div className="max-w-full container bg-[#04052E] relative h-[90vh] flex justify-center items-center">
       <div className="flex flex-wrap items-center">
-        <div className="md:flex gap-6 inline-block -mt-16">
-        <div className="md:ml-auto md:mr-auto w-full px-4 text-center mt-24 md:m-auto">
+        <div className="md:flex block">
+        <div className="w-full px-4 text-center">
           <h1 className="block font-sans text-4xl md:text-5xl leading-tight text-white mb-6 font-black">
             Your story starts with us.
           </h1>

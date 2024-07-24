@@ -9,10 +9,12 @@ const FormikControl = ({ control, ...rest }) => {
       return <Input {...rest} />;
       
     case 'textarea':
-      return (<div className="">
-        <Field as="textarea" {...rest} />
-        <ErrorMessage name={rest.name} component="div" className="text-red-500" />
-      </div>)
+      return (
+           <div>
+                 <Field as="textarea" {...rest} />
+                 <ErrorMessage name={rest.name} component="div" className="text-red-500" />
+            </div>
+            )
     case 'select':
       return (
         <Field as="select" {...rest} className="p-2 text-sm rounded-md focus:border-2 focus:border-cyan-500 focus:outline-none">

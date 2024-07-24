@@ -1,11 +1,11 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import { collection, doc, getDocs, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import FormikControl from './FormikControl';
+import FormikControl from '../FormikControl';
 import { useContext } from 'react';
-import AuthContext from './AuthContext';
+import AuthContext from '../AuthContext';
 
 const initialValues = {
   collegename: '',
@@ -23,7 +23,7 @@ const validationSchema = Yup.object({
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login,} = useContext(AuthContext);
+  const { login,closeInstituteModal, closeOthersModal} = useContext(AuthContext);
 
   const handleSubmit = async ({ collegename, email, password, role }, { resetForm, setSubmitting }) => {
     try {
@@ -34,6 +34,8 @@ const Login = () => {
 
       if (!querySnapshot.empty) {
         alert("Login successful");
+        closeInstituteModal()
+        closeOthersModal()
         login({ role: role, collegename: collegename, email: email });
         navigate("/services");
       } else {

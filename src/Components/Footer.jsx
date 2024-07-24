@@ -1,7 +1,7 @@
 
 const Footer = () => {
   return (
-    <div className="flex flex-col justify-center items-center py-24 md:flex-row md:justify-around md:px-5 md:py-5 text-white bg-[#04052E] border-t-2 border-slate-50">
+    <div className="flex flex-col justify-center items-center py-14 md:py-12 md:flex-row md:justify-around text-white bg-[#04052E] border-t-2 border-slate-50">
         <div className="flex flex-col py-2 text-center">
             <h2>Campus Projects Hub</h2>
         </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { db } from '../firebase';
-import { collection, getDocs, addDoc, deleteDoc, doc, where, query } from "firebase/firestore";
+import { collection, getDocs, addDoc, deleteDoc, setDoc, doc, where, query } from "firebase/firestore";
 import AuthContext from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -76,28 +76,56 @@ const Services = () => {
   };
 
   const handleAddUser = async () => {
-    const collegeDocRef = doc(db, "colleges", user.collegename);
-    const usersRef = collection(collegeDocRef, newUser.role === 'student' ? 'users' : 'admins');
-    const q = query(usersRef, where("email", "==", newUser.email));
-    console.log(q)
-    if(!newUser.email || !newUser.password || !newUser.role){
+    if (!newUser.email || !newUser.password || !newUser.role) {
       alert("User details are required");
       return;
     }
-    else if (q){
-      alert("User already exists");
-      return;
+  
+    const collegeDocRef = doc(db, "colleges", user.collegename);
+    const usersRef = collection(collegeDocRef, newUser.role === 'student' ? 'users' : 'admins');
+    const q = query(usersRef, where("email", "==", newUser.email));
+    
+    try {
+      const querySnapshot = await getDocs(q);
+  
+      if (!querySnapshot.empty) {
+        alert("User already exists");
+        return;
+      }
+  
+      const newUserDocRef = doc(usersRef);
+      await setDoc(newUserDocRef, {
+        email: newUser.email,
+        password: newUser.password,
+        role: newUser.role,
+      });
+  
+      setNewUser({ email: '', password: '', role: 'student' });
+      alert("User added successfully");
+    } catch (error) {
+      console.error("Error adding user: ", error);
+      alert("Failed to add user");
     }
-    setNewUser({ email: '', password: '', role: 'student' });
-    alert("user added");
   };
 
   if (!user) {
     return (
-      <div className='text-3xl flex w-full h-screen items-center justify-center bg-[#04052E] text-white'>
+      <div className='text-xl md:text-3xl flex w-full h-screen items-center justify-center bg-[#04052E] text-white p-5'>
         Login to Access content of Services
       </div>
     );
+  }
+
+  if(user.role === "Branch admin"){
+    return (
+      <div className='h-screen w-full flex justify-center items-center bg-[#04052E] text-white text-3xl'>Hello Branch admin</div>
+    )
+  }
+
+  if(user.role === "Team admin"){
+    return (
+      <div className='h-screen w-full flex justify-center items-center bg-[#04052E] text-white text-3xl'>Hello Team admin</div>
+    )
   }
 
   return (
