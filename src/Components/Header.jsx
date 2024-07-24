@@ -18,7 +18,7 @@ const Header = () => {
     <div className="sticky top-0 z-50 shadow-md bg-[#04052E] shadow-slate-50">
       <nav className="flex justify-between px-7 py-4">
         <div>
-          <h2 className="text-2xl text-white font-bold">
+          <h2 className="text-2xl text-white font-bold" data-aos="fade-right">
             <Link to="/">Campus Projects Hub</Link>
           </h2>
         </div>
@@ -28,16 +28,16 @@ const Header = () => {
 
         <ul className={`bg-[#04052E] md:bg-transparent fixed top-0 left-0 flex gap-6 flex-col justify-center items-center w-full h-screen md:static md:w-auto md:h-auto md:flex md:flex-row text-white transition-transform transform ${showMenu ? "translate-x-0" : "translate-x-full md:translate-x-0"}`}>
           <li onClick={() => setShowMenu(false)}>
-            <Link to="/" className="px-4 hover:text-orange-500">Home</Link>
+            <Link to="/" className="px-4 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Home</Link>
           </li>
           <li onClick={() => setShowMenu(false)}>
-            <Link to="/about" className="px-4 hover:text-orange-500">About</Link>
+            <Link to="/about" className="px-4 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">About</Link>
           </li>
           <li onClick={() => setShowMenu(false)}>
-            <Link to="/services" className="px-4 md:py-2 hover:text-orange-500">Services</Link>
+            <Link to="/services" className="px-4 md:py-2 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Services</Link>
           </li>
           <li onClick={() => setShowMenu(false)}>
-            <Link to="/contact" className="px-4 md:py-2 hover:text-orange-500">Contact</Link>
+            <Link to="/contact" className="px-4 md:py-2 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Contact</Link>
           </li>
           {user ? (
             <>
@@ -49,8 +49,8 @@ const Header = () => {
               </li>
             </>
           ) : (
-            <li className="px-4 py-3 md:py-2 md:rounded-md md:outline-none md:border-2 md:hover:border-white-500 md:hover:bg-white md:hover:text-black md:font-bold" onClick={() => { setShowMenu(false); openModal(); }}>
-              <button className="border-none outline-none">Login</button>
+            <li className="px-4 py-3 md:py-2 md:rounded-md md:outline-none md:border-2 md:hover:border-white-500 md:hover:bg-white md:hover:text-black md:font-bold" onClick={() => { setShowMenu(false); openModal(); }} data-aos="fade-down">
+              <button className="border-none outline-none" data-aos="fade-down" data-aos-duration="2000">Login</button>
             </li>
           )}
         </ul>

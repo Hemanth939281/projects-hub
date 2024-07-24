@@ -5,21 +5,21 @@ const Footer = () => {
         <div className="flex flex-col py-2 text-center">
             <h2>Campus Projects Hub</h2>
         </div>
-        <div className="flex flex-col py-2 text-center">
+        <div className="flex flex-col py-2 text-center" data-aos="zoom-in">
             <p>About</p>
             <p>Services</p>
             <p>FAQ</p>
         </div>
-        <div className="flex flex-col py-2 text-center">
+        <div className="flex flex-col py-2 text-center" data-aos="zoom-in">
             <p>Privacy policy</p>
             <p>Terms of services</p>
             <p>legal info</p>
         </div>
-        <div className="flex flex-col py-2">
+        <div className="flex flex-col py-2" data-aos="zoom-in">
             <p className="ml-6">
                 &copy; Copy 2024 Rights Reserved
             </p>
-            <div className="block space-x-2 mt-2 text-center">
+            <div className="block space-x-2 mt-2 text-center" data-aos="zoom-in">
                 <a href="#">Facebook</a>
                 <a href="#">Twitter</a>
                 <a href="#">LinkedIn</a>

@@ -1,0 +1,14 @@
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    60% {
+      transform: translateY(30px);
+    }
+  }
+  
+  .bounce-animate {
+    animation: bounce 2s infinite;
+  }
+  
