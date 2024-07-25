@@ -3,7 +3,9 @@ import { db } from '../firebase';
 import { collection, getDocs, addDoc, deleteDoc, setDoc, doc, where, query } from "firebase/firestore";
 import AuthContext from './AuthContext';
 import { useNavigate } from 'react-router-dom';
-
+import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
+import AddBranchAdmin from './AddMembers/AddBranchAdmin';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Services = () => {
   const { user, } = useContext(AuthContext);
@@ -21,6 +23,7 @@ const Services = () => {
   const [newVacancy, setNewVacancy] = useState({ projectTitle: '', stack: '', contact: '', });
   const [newUser, setNewUser] = useState({ email: '', password: '', role: 'student' });
 
+  const [showBranchAdminModal, setShowBranchAdminModal] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       if (!user?.collegename) return;
@@ -114,6 +117,32 @@ const Services = () => {
         Login to Access content of Services
       </div>
     );
+  }
+  if(user.role === "Institute admin"){
+    return(
+      <>
+      <div className=' bg-[#04052E]'>
+          <h2 className="text-4xl font-bold mb-6 text-white text-center pt-10">Add Branch Admins</h2>
+          <div className='h-[20vh] w-full flex flex-wrap gap-6 justify-center items-center'>
+          <button className="mt-4 py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{setShowBranchAdminModal(true)}}>
+          <AddCircleOutlineRoundedIcon/>
+            </button>
+            {
+              showBranchAdminModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                 <div className="relative w-full max-w-md bg-[#04052E] rounded-lg shadow-lg p-8 text-white max-h-[90vh] overflow-y-auto mx-4">
+                 <button onClick={()=>{setShowBranchAdminModal(false)}} className="absolute top-4 right-4 text-white">
+              <    CloseIcon />
+                 </button>
+                 <AddBranchAdmin style={{fontSize:50,}}/>
+                 </div>
+                </div>
+              )
+              }
+          </div>
+        </div>
+      </>
+    )
   }
 
   if(user.role === "Branch admin"){

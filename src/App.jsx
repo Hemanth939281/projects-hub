@@ -8,7 +8,7 @@ const App = () => {
   useEffect(()=>{
     AOS.init({
       duration: 1000,
-      once:"true"
+      // once:"true"
     });
   },[])
   return (
