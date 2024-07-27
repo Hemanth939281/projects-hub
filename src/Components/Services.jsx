@@ -3,12 +3,13 @@ import { db } from '../firebase';
 import { collection, getDocs, addDoc, deleteDoc, setDoc, doc, where, query } from "firebase/firestore";
 import AuthContext from './AuthContext';
 import { useNavigate } from 'react-router-dom';
-import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import AddBranchAdmin from './AddMembers/AddBranchAdmin';
 import CloseIcon from '@mui/icons-material/Close';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 const Services = () => {
-  const { user, } = useContext(AuthContext);
+  const { user, showDeleteAdminModal, openDeleteAdminModal, closeDeleteAdminModal, showBranchAdminModal, openBranchAdminModal, closeBranchAdminModal } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +24,6 @@ const Services = () => {
   const [newVacancy, setNewVacancy] = useState({ projectTitle: '', stack: '', contact: '', });
   const [newUser, setNewUser] = useState({ email: '', password: '', role: 'student' });
 
-  const [showBranchAdminModal, setShowBranchAdminModal] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       if (!user?.collegename) return;
@@ -122,16 +122,37 @@ const Services = () => {
     return(
       <>
       <div className=' bg-[#04052E]'>
-          <h2 className="text-4xl font-bold mb-6 text-white text-center pt-10">Add Branch Admins</h2>
-          <div className='h-[20vh] w-full flex flex-wrap gap-6 justify-center items-center'>
-          <button className="mt-4 py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{setShowBranchAdminModal(true)}}>
-          <AddCircleOutlineRoundedIcon/>
+          <h2 className="text-4xl font-bold mb-6 text-white text-center pt-10 mb-10">Manage Branch Admins</h2>
+          <div className='h-[60vh] w-full flex flex-wrap gap-12 justify-center items-center pb-10'>
+                <div className="bg-white p-8 rounded-lg shadow-lg text-black text-center">
+                  <h3 className="text-2xl font-semibold mb-2 text-indigo-700">Add New Admin</h3>
+          <button className="mt-4 py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{openBranchAdminModal()}}>
+          <PersonAddAltIcon style={{fontSize:50}}/>
             </button>
+            </div>
             {
               showBranchAdminModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                  <div className="relative w-full max-w-md bg-[#04052E] rounded-lg shadow-lg p-8 text-white max-h-[90vh] overflow-y-auto mx-4">
-                 <button onClick={()=>{setShowBranchAdminModal(false)}} className="absolute top-4 right-4 text-white">
+                 <button onClick={()=>{closeBranchAdminModal()}} className="absolute top-4 right-4 text-white">
+              <    CloseIcon />
+                 </button>
+                 <AddBranchAdmin style={{fontSize:50}}/>
+                 </div>
+                </div>
+              )
+              }
+              <div className="bg-white p-8 rounded-lg shadow-lg text-black text-center">
+                  <h3 className="text-2xl font-semibold mb-2 text-indigo-700">Delete Admin</h3>
+          <button className="mt-4 py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{openDeleteAdminModal()}}>
+          <PersonRemoveIcon style={{fontSize:50}}/>
+            </button>
+            </div>
+            {
+              showDeleteAdminModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                 <div className="relative w-full max-w-md bg-[#04052E] rounded-lg shadow-lg p-8 text-white max-h-[90vh] overflow-y-auto mx-4">
+                 <button onClick={()=>{closeDeleteAdminModal()}} className="absolute top-4 right-4 text-white">
               <    CloseIcon />
                  </button>
                  <AddBranchAdmin style={{fontSize:50,}}/>

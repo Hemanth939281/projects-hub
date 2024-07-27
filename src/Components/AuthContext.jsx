@@ -10,6 +10,8 @@ export const AuthProvider = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
   const [showInstituteModal, setShowInstituteModal] = useState(false);
   const [showOthersModal, setShowOthersModal] = useState(false);
+  const [showDeleteAdminModal, setShowDeleteAdminModal] = useState(false);
+  const [showBranchAdminModal, setShowBranchAdminModal] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -54,8 +56,24 @@ export const AuthProvider = ({ children }) => {
     setShowOthersModal(false);
   };
 
+  const openDeleteAdminModal = () => {
+    setShowDeleteAdminModal(true);
+  };
+
+  const closeDeleteAdminModal = () => {
+    setShowDeleteAdminModal(false);
+  };
+
+  const openBranchAdminModal = () =>{
+    setShowBranchAdminModal(true);
+  }
+
+  const closeBranchAdminModal = () =>{
+    setShowBranchAdminModal(false);
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, openModal, closeModal, showModal, openInstituteModal, closeInstituteModal, showInstituteModal, openOthersModal, closeOthersModal, showOthersModal }}>
+    <AuthContext.Provider value={{ user, login, logout, openModal, closeModal, showModal, openInstituteModal, closeInstituteModal, showInstituteModal, openOthersModal, closeOthersModal, showOthersModal,openDeleteAdminModal, closeDeleteAdminModal,showDeleteAdminModal,openBranchAdminModal,closeBranchAdminModal,showBranchAdminModal }}>
       {children}
     </AuthContext.Provider>
   );
