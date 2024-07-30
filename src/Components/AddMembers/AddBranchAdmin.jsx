@@ -101,7 +101,7 @@ const AddBranchAdmin = () => {
       </select>
       <button
         onClick={handleAddBranchAdmin}
-        className="px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-blue-600 hover:to-green-500 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        className={`mt-4 px-4 py-2 ${showDeleteAdminModal ? "bg-red-500 text-white hover:bg-red-600":"bg-green-500 hover:bg-green-600"} text-white rounded-md shadow-sm focus:outline-none`}
       >
         {showDeleteAdminModal ? "Delete Admin" : "Add Admin"}
       </button>

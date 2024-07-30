@@ -39,6 +39,9 @@ const Header = () => {
           <li onClick={() => setShowMenu(false)}>
             <Link to="/contact" className="px-4 md:py-2 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Contact</Link>
           </li>
+          {user?.role === "Branch admin" ? <li onClick={() => setShowMenu(false)}>
+            <Link to="/branchadminblog" className="px-4 md:py-2 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Requests</Link>
+          </li> : null}
           {user ? (
             <>
               <span className="md:px-4 md:py-3 md:py-1 md:py-2">{user.email}</span>

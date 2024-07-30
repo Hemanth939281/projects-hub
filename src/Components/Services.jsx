@@ -7,6 +7,10 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import AddBranchAdmin from './AddMembers/AddBranchAdmin';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import AddTeamAdmin from './AddMembers/AddTeamAdmin';
+import { Formik, Form, } from 'formik';
+import FormikControl from './FormikControl';
+import * as Yup from "yup"
 
 const Services = () => {
   const { user, showDeleteAdminModal, openDeleteAdminModal, closeDeleteAdminModal, showBranchAdminModal, openBranchAdminModal, closeBranchAdminModal } = useContext(AuthContext);
@@ -111,6 +115,28 @@ const Services = () => {
     }
   };
 
+  const initialValues = {
+    name: "",
+    year: "",
+    skills: "",
+    technologies: "",
+    idea: ""
+  }
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    year: Yup.string().required("Year is required"),
+    skills: Yup.string().required("Skills are required"),
+    technologies: Yup.string().required("Technologies are required"),
+    idea: Yup.string().required("Idea is required")
+  })
+
+  const handleSubmit = (values, {resetForm, setSubmitting}) =>{
+    console.log("Form submitted", values);
+    resetForm();
+    setSubmitting(false);
+  }
+
   if (!user) {
     return (
       <div className='text-xl md:text-3xl flex w-full h-screen items-center justify-center bg-[#04052E] text-white p-5'>
@@ -122,11 +148,11 @@ const Services = () => {
     return(
       <>
       <div className=' bg-[#04052E]'>
-          <h2 className="text-4xl font-bold mb-6 text-white text-center pt-10 mb-10">Manage Branch Admins</h2>
-          <div className='h-[60vh] w-full flex flex-wrap gap-12 justify-center items-center pb-10'>
-                <div className="bg-white p-8 rounded-lg shadow-lg text-black text-center">
+          <h2 className="text-4xl font-bold mb-16 text-white text-center pt-10 mb-10">Manage Branch Admins</h2>
+          <div className='h-[80%] w-full flex flex-wrap gap-12 justify-center items-center pb-10'>
+                <div className="bg-white p-4 md:px-8 rounded-lg shadow-lg text-black text-center">
                   <h3 className="text-2xl font-semibold mb-2 text-indigo-700">Add New Admin</h3>
-          <button className="mt-4 py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{openBranchAdminModal()}}>
+          <button className=" py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{openBranchAdminModal()}}>
           <PersonAddAltIcon style={{fontSize:50}}/>
             </button>
             </div>
@@ -142,9 +168,9 @@ const Services = () => {
                 </div>
               )
               }
-              <div className="bg-white p-8 rounded-lg shadow-lg text-black text-center">
+              <div className="bg-white p-4 md:px-10 rounded-lg shadow-lg text-black text-center">
                   <h3 className="text-2xl font-semibold mb-2 text-indigo-700">Delete Admin</h3>
-          <button className="mt-4 py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{openDeleteAdminModal()}}>
+          <button className="py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{openDeleteAdminModal()}}>
           <PersonRemoveIcon style={{fontSize:50}}/>
             </button>
             </div>
@@ -166,17 +192,76 @@ const Services = () => {
     )
   }
 
-  if(user.role === "Branch admin"){
+  if(user?.role === "Branch admin"){
     return (
-      <div className='h-screen w-full flex justify-center items-center bg-[#04052E] text-white text-3xl'>Hello Branch admin</div>
+      <div className='h-screen w-full flex justify-center items-center bg-[#04052E] text-white text-3xl'>
+        <AddTeamAdmin/>
+      </div>
     )
   }
 
-  if(user.role === "Team admin"){
+  if(user?.role === "Team admin"){
     return (
       <div className='h-screen w-full flex justify-center items-center bg-[#04052E] text-white text-3xl'>Hello Team admin</div>
     )
   }
+  if(user?.role === "student"){
+    return (
+      <div className='w-full bg-[#04052E]'>
+      <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-bold mb-6 text-white text-center">Services</h1>
+            <div className="mb-6">
+              <h2 className="text-3xl font-semibold my-8 text-white">Projects</h2>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {projects.map((project, index) => (
+                  <div key={index} className="bg-white p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300 z-10">
+                    <h3 className="text-2xl font-semibold text-blue-700">{project.name}</h3>
+                    <p className="text-gray-700 mt-2"><span className="font-semibold text-indigo-600">Stack:</span> {project.stack}</p>
+                    <p className="text-gray-700"><span className="font-semibold text-indigo-600">Members:</span> {project.members}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="mb-6">
+              <h2 className="text-3xl font-semibold my-8 text-white">Vacancies</h2>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {vacancies.map((vacancy, index) => (
+                  <div key={index} className="bg-white p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300 z-10">
+                    <h3 className="text-2xl font-semibold text-blue-700">{vacancy.projectTitle}</h3>
+                    <p className="text-gray-700 mt-2"><span className="font-semibold text-indigo-600">Stack:</span> {vacancy.stack}</p>
+                    <p className="text-gray-700"><span className="font-semibold text-indigo-600">Contact:</span> {vacancy.contact}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="my-8">
+              <div className="w-full text-white flex justify-center items-center p-4">
+                <div className='w-full max-w-xl flex flex-col border-2 border-black p-10 rounded-lg shadow-md shadow-slate-50'>
+               <h1 className="text-3xl font-bold text-center mb-6">Idea Submission</h1>
+               <Formik
+                 initialValues={initialValues}
+                 validationSchema={validationSchema}
+                 onSubmit={handleSubmit}
+               >
+                 {({ isSubmitting }) => (
+                   <Form>
+                     <FormikControl control="input" name="name" type="text" label="Name" />
+                     <FormikControl control="input" name="year" type="text" label="Year"/>
+                     <FormikControl control="input" name="skills" type="text" label="Skills"/>
+                     <FormikControl control="input" name="technologies" type="text" label="Technologies To be needed"/>
+                     <FormikControl control="textarea" name="idea" type="text" label="Idea"/>
+                     <button disabled={isSubmitting} type="submit" className="w-full mt-4 py-2 px-4 bg-white text-black hover:bg-blue-500 hover:text-white font-bold rounded-md shadow-sm active:ring-4 active:ring-white-500">
+              {isSubmitting ? 'Submitting...' : 'Submit'}
+            </button>
+                     </Form>
+                 )}
+                     </Formik>
+                   </div>
+                   </div>
+                   </div>
+                   </div>
+                   </div>
+                )}
 
   return (
     <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">

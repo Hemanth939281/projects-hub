@@ -11,7 +11,10 @@ const FormikControl = ({ control, ...rest }) => {
     case 'textarea':
       return (
            <div>
-                 <Field as="textarea" {...rest} />
+                 <label htmlFor={rest.name} className="block text-md font-medium my-2">
+                   {rest.label}
+                 </label>
+                 <Field as="textarea" {...rest} className="mt-1 block w-full px-2 md:px-4 py-2 rounded-md shadow-sm border-2 border-gray-500 bg-transparent focus:outline-none focus:border-cyan-500" />
                  <ErrorMessage name={rest.name} component="div" className="text-red-500" />
             </div>
             )
