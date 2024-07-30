@@ -235,8 +235,8 @@ const Services = () => {
               </div>
             </div>
             <div className="my-8">
-              <div className="w-full text-white flex justify-center items-center p-4">
-                <div className='w-full max-w-xl flex flex-col border-2 border-black p-10 rounded-lg shadow-md shadow-slate-50'>
+              <div className="w-full text-white flex justify-center items-center md:p-4">
+                <div className='w-full max-w-xl flex flex-col p-4 md:p-10 md:rounded-lg md:shadow-md md:shadow-slate-50'>
                <h1 className="text-3xl font-bold text-center mb-6">Idea Submission</h1>
                <Formik
                  initialValues={initialValues}
