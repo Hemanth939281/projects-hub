@@ -11,9 +11,10 @@ import AddTeamAdmin from './AddMembers/AddTeamAdmin';
 import { Formik, Form, } from 'formik';
 import FormikControl from './FormikControl';
 import * as Yup from "yup"
+import ideaSubmissionPhoto from '../assets/ideaSubmissionPhoto.png'
 
 const Services = () => {
-  const { user, showDeleteAdminModal, openDeleteAdminModal, closeDeleteAdminModal, showBranchAdminModal, openBranchAdminModal, closeBranchAdminModal } = useContext(AuthContext);
+  const { user, showDeleteAdminModal, openDeleteAdminModal, closeDeleteAdminModal, showBranchAdminModal, openBranchAdminModal, closeBranchAdminModal,openModal, closeModal, showModal} = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -147,9 +148,9 @@ const Services = () => {
   if(user.role === "Institute admin"){
     return(
       <>
-      <div className=' bg-[#04052E]'>
+      <div className=' bg-[#04052E] p-10'>
           <h2 className="text-4xl font-bold mb-16 text-white text-center pt-10 mb-10">Manage Branch Admins</h2>
-          <div className='h-[80%] w-full flex flex-wrap gap-12 justify-center items-center pb-10'>
+          <div className='h-[100%] w-full flex flex-wrap gap-12 justify-center items-center pb-10'>
                 <div className="bg-white p-4 md:px-8 rounded-lg shadow-lg text-black text-center">
                   <h3 className="text-2xl font-semibold mb-2 text-indigo-700">Add New Admin</h3>
           <button className=" py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{openBranchAdminModal()}}>
@@ -222,7 +223,7 @@ const Services = () => {
                 ))}
               </div>
             </div>
-            <div className="mb-6">
+            <div className="mb-16">
               <h2 className="text-3xl font-semibold my-8 text-white">Vacancies</h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {vacancies.map((vacancy, index) => (
@@ -234,7 +235,22 @@ const Services = () => {
                 ))}
               </div>
             </div>
-            <div className="my-8">
+            <div className='w-full text-white md:my-16 p-5'>
+            <h1 className='text-3xl font-semibold my-8 text-white text-center mb-16'>Idea Submission</h1>
+                <div className='flex flex-col md:flex-row items-center justify-center gap-x-48'>
+                  <img src={ideaSubmissionPhoto} alt="photoBesideForm" className='md:w-1/3 rounded-lg border-2 border-white'/>
+                  <div className='mt-4 md:w-2/3 text-center'>
+                <h1>A single idea, the sudden flash of a thought, may be worth a million dollars</h1>
+                <button onClick={()=>{openModal()}} className='p-2 my-16 border-2 border-white rounded-md hover:bg-blue-500 hover:text-white hover:font-bold'>Submit Idea</button>
+                </div>
+                </div>
+              </div>
+            { showModal && 
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="relative w-full max-w-xl bg-[#04052E] rounded-lg shadow-lg p-8 text-white max-h-[100vh]">
+            <button onClick={()=>{closeModal()}} className="absolute top-4 right-4 text-white">
+              <    CloseIcon />
+                 </button>
               <div className="w-full text-white flex justify-center items-center md:p-4">
                 <div className='w-full max-w-xl flex flex-col p-4 md:p-10 md:rounded-lg md:shadow-md md:shadow-slate-50'>
                <h1 className="text-3xl font-bold text-center mb-6">Idea Submission</h1>
@@ -259,6 +275,8 @@ const Services = () => {
                    </div>
                    </div>
                    </div>
+                   </div>
+                    }
                    </div>
                    </div>
                 )}

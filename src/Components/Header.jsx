@@ -17,11 +17,9 @@ const Header = () => {
   return (
     <div className="sticky top-0 z-50 shadow-md bg-[#04052E] shadow-slate-50">
       <nav className="flex justify-between px-7 py-4">
-        <div>
           <h2 className="text-2xl text-white font-bold" data-aos="fade-right">
             <Link to="/">Campus Projects Hub</Link>
           </h2>
-        </div>
         <button className="text-white md:hidden" onClick={handleToggleMenu}>
           {showMenu ? <CloseIcon /> : <MenuIcon />}
         </button>
@@ -44,7 +42,6 @@ const Header = () => {
           </li> : null}
           {user ? (
             <>
-              <span className="md:px-4 md:py-3 md:py-1 md:py-2">{user.email}</span>
               <li className="md:px-4 md:py-2 block lg:flex gap-4">
                 <button onClick={logout} className="md:px-4 md:py-2 md:rounded-md md:border-2 md:border-white-500 md:hover:bg-white md:hover:text-black md:font-bold">
                   Logout
