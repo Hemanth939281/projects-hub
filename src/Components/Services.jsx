@@ -131,11 +131,28 @@ const Services = () => {
     technologies: Yup.string().required("Technologies are required"),
     idea: Yup.string().required("Idea is required")
   })
-
-  const handleSubmit = (values, {resetForm, setSubmitting}) =>{
+  //idea form submission
+  const handleSubmit = async(values, {resetForm, setSubmitting}) =>{
     console.log("Form submitted", values);
+    if(values){
+      const ideaCollRef = collection(db, "colleges", user.collegename,'Branches',user.branch, 'ideas');
+      const newIdeaDocRef = doc(ideaCollRef); 
+      await setDoc(newIdeaDocRef, { 
+      name: values.name,
+      year: values.year,
+      skills: values.skills,
+      technologies: values.technologies,
+      idea: values.idea,
+      submittedBy: user.email,
+      createdAt: new Date(),
+      status: 'Pending'
+});
+
+      alert("Idea submitted successfully");
+    }
     resetForm();
     setSubmitting(false);
+    closeModal();
   }
 
   if (!user) {
@@ -247,7 +264,7 @@ const Services = () => {
               </div>
             { showModal && 
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="relative w-full max-w-xl bg-[#04052E] rounded-lg shadow-lg p-8 text-white max-h-[100vh]">
+            <div className="relative w-full max-w-xl bg-[#04052E] rounded-lg shadow-lg p-8 text-white h-[95vh] overflow-y-auto">
             <button onClick={()=>{closeModal()}} className="absolute top-4 right-4 text-white">
               <    CloseIcon />
                  </button>

@@ -12,7 +12,7 @@ const App = () => {
     });
   },[])
   return (
-    <div className='Applayout overflow-x-hidden'>
+    <div className='Applayout'>
       <Header/>
       <Body/>
       <Footer/>
