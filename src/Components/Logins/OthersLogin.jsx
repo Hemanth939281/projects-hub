@@ -39,14 +39,14 @@ const OthersLogin = () => {
         subCollectionPath = "admins/Team admin/team admins";
       }
 
-      const subCollectionRef = collection(db, "colleges", collegename, "Branches", branch, subCollectionPath);
+      const subCollectionRef = collection(db, "colleges", collegename.toLowerCase().trim(), "Branches", branch, subCollectionPath);
       const q = query(subCollectionRef, where("email", "==", email), where("password", "==", password));
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
         alert("Login successful");
         closeOthersModal();
-        login({ role: role, collegename: collegename, email: email,branch: branch });
+        login({ role: role, collegename: collegename.toLowerCase(), email: email,branch: branch });
         navigate("/services");
       } else {
         alert("Invalid credentials");

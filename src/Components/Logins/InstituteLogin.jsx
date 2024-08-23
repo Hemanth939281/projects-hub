@@ -29,7 +29,7 @@ const InstituteLogin = () => {
 
   const handleSubmit = async ({ collegename, email, password, role, }, { resetForm, setSubmitting }) => {
     try {
-      const InstituteDocRef = collection(db, "colleges", collegename,"Institute admins");
+      const InstituteDocRef = collection(db, "colleges", collegename.toLowerCase().trim(),"Institute admins");
       const q = query(InstituteDocRef, where("email", "==", email), where("password", "==", password));
       const querySnapshot = await getDocs(q);
 
