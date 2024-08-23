@@ -26,30 +26,30 @@ const Header = () => {
 
         <ul className={`bg-[#04052E] md:bg-transparent fixed top-0 left-0 flex gap-6 flex-col justify-center items-center w-full h-screen md:static md:w-auto md:h-auto md:flex md:flex-row text-white transition-transform transform ${showMenu ? "translate-x-0" : "translate-x-full md:translate-x-0"}`}>
           <li onClick={() => setShowMenu(false)}>
-            <Link to="/" className="px-4 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Home</Link>
+            <Link to="/" className="hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Home</Link>
           </li>
           <li onClick={() => setShowMenu(false)}>
-            <Link to="/about" className="px-4 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">About</Link>
+            <Link to="/about" className="hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">About</Link>
           </li>
           <li onClick={() => setShowMenu(false)}>
-            <Link to="/services" className="px-4 md:py-2 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Services</Link>
+            <Link to="/services" className="hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Services</Link>
           </li>
           <li onClick={() => setShowMenu(false)}>
-            <Link to="/contact" className="px-4 md:py-2 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Contact</Link>
+            <Link to="/contact" className="hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Contact</Link>
           </li>
           {user?.role === "Branch admin" ? <li onClick={() => setShowMenu(false)}>
-            <Link to="/branchadminblog" className="px-4 md:py-2 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Requests</Link>
+            <Link to="/branchadminblog" className="hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Requests</Link>
           </li> : null}
           {user ? (
             <>
-              <li className="md:px-4 md:py-2 block lg:flex gap-4">
-                <button onClick={logout} className="md:px-4 md:py-2 md:rounded-md md:border-2 md:border-white-500 md:hover:bg-white md:hover:text-black md:font-bold">
+              <li className="md:p-2 md:rounded-md md:border-2 md:border-white-500 md:hover:bg-white md:hover:text-black md:font-bold">
+                <button onClick={logout} className="border-none outline-none" data-aos="fade-down" data-aos-duration="2000">
                   Logout
                 </button>
               </li>
             </>
           ) : (
-            <li className="px-4 py-3 md:py-2 md:rounded-md md:outline-none md:border-2 md:hover:border-white-500 md:hover:bg-white md:hover:text-black md:font-bold" onClick={() => { setShowMenu(false); openModal(); }} data-aos="fade-down">
+            <li className="md:p-2 md:rounded-md md:outline-none md:border-2 md:hover:border-white-500 md:hover:bg-white md:hover:text-black md:font-bold" onClick={() => { setShowMenu(false); openModal(); }} data-aos="fade-down">
               <button className="border-none outline-none" data-aos="fade-down" data-aos-duration="2000">Login</button>
             </li>
           )}

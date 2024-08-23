@@ -46,7 +46,7 @@ const OthersLogin = () => {
       if (!querySnapshot.empty) {
         alert("Login successful");
         closeOthersModal();
-        login({ role: role, collegename: collegename.toLowerCase(), email: email,branch: branch });
+        login({ role: role, collegename: collegename.toLowerCase().trim(), email: email,branch: branch });
         navigate("/services");
       } else {
         alert("Invalid credentials");

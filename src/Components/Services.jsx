@@ -166,8 +166,8 @@ const Services = () => {
     return(
       <>
       <div className=' bg-[#04052E] p-10'>
-          <h2 className="text-4xl font-bold mb-16 text-white text-center pt-10 mb-10">Manage Branch Admins</h2>
-          <div className='h-[100%] w-full flex flex-wrap gap-12 justify-center items-center pb-10'>
+          <h2 className="text-2xl md:text-4xl font-bold mb-16 text-white text-center p-5 md:pt-10 md:mb-10">Manage Branch Admins</h2>
+          <div className='h-[60vh] w-full flex flex-wrap gap-12 justify-center items-center pb-10'>
                 <div className="bg-white p-4 md:px-8 rounded-lg shadow-lg text-black text-center">
                   <h3 className="text-2xl font-semibold mb-2 text-indigo-700">Add New Admin</h3>
           <button className=" py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{openBranchAdminModal()}}>
