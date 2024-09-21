@@ -37,7 +37,7 @@ const InstituteLogin = () => {
       if (!querySnapshot.empty) {
         console.log(role);
         closeInstituteModal();
-        login({ role: role, collegename: collegename, email: email });
+        login({ role: role, collegename: collegename.toLowerCase().trim(), email: email });
         navigate("/services");
         toast.success("Login Successful");
       } else {

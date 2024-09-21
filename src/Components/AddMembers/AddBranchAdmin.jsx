@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import AuthContext from "../AuthContext";
 import { db } from "../../firebase";
 import { collection, query, where, getDocs, setDoc, doc, deleteDoc } from "firebase/firestore";
+import toast from "react-hot-toast";
 
 const AddBranchAdmin = () => {
   const { user, showDeleteAdminModal, closeBranchAdminModal, closeDeleteAdminModal } = useContext(AuthContext);
@@ -22,7 +23,7 @@ const AddBranchAdmin = () => {
 
   const handleAddBranchAdmin = async () => {
     if (!newBranchAdmin.email || !newBranchAdmin.password || !newBranchAdmin.branch) {
-      alert("User details are required");
+      toast.error("User details are required");
       return;
     }
 
@@ -33,17 +34,17 @@ const AddBranchAdmin = () => {
     try {
       if (showDeleteAdminModal) {
         if (querySnapshot.empty) {
-          alert("User not found");
+          toast.error("User not found");
           return;
         }
         const docToDelete = querySnapshot.docs[0];
         await deleteDoc(doc(branchAdminCollectionRef, docToDelete.id));
         setBranchAdmins(branchAdmins.filter(admin => admin.id !== docToDelete.id));
-        alert("User deleted successfully");
+        toast.error("User deleted successfully");
         closeDeleteAdminModal();
       } else {
         if (!querySnapshot.empty) {
-          alert("User already exists");
+          toast.error("User already exists");
           return;
         }
 
@@ -55,13 +56,13 @@ const AddBranchAdmin = () => {
 
         setBranchAdmins([...branchAdmins, { id: newUserDocRef.id, email: newBranchAdmin.email, password: newBranchAdmin.password }]);
         setNewBranchAdmin({ email: '', password: '', branch: '' });
-        alert("User added successfully");
+          toast.success("User added successfully");
         closeBranchAdminModal()
       }
       closeBranchAdminModal();
     } catch (error) {
       console.error("Error handling user: ", error);
-      alert("Failed to handle user");
+      toast.error("Failed to handle user");
     }
   };
 
