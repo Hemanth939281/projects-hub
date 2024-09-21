@@ -26,7 +26,7 @@ const Header = () => {
           {showMenu ? <CloseIcon /> : <MenuIcon />}
         </button>
 
-        <ul className={`bg-[#04052E] md:bg-transparent fixed top-0 left-0 flex gap-6 flex-col justify-center items-center w-full h-screen md:static md:w-auto md:h-auto md:flex md:flex-row text-white transition-transform transform ${showMenu ? "translate-x-0" : "translate-x-full md:translate-x-0"}`}>
+        <ul className={`bg-[#04052E] md:bg-transparent fixed top-0 left-0 w-screen flex gap-6 flex-col justify-center items-center w-full h-screen md:static md:w-auto md:h-auto md:flex md:flex-row text-white transition-transform transform ${showMenu ? "translate-x-0" : "translate-x-full md:translate-x-0"}`}>
           <li onClick={() => setShowMenu(false)}>
             <Link to="/" className="px-4 hover:text-orange-500" data-aos="fade-down" data-aos-duration="2000">Home</Link>
           </li>

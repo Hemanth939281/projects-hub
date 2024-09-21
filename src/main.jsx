@@ -8,20 +8,8 @@ import Contact from './Components/Contact.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Error from './Components/Error.jsx'; 
 import { AuthProvider } from './Components/AuthContext.jsx';
-import AuthContext from './Components/AuthContext.jsx';
-import { useContext } from 'react';
 import BranchAdminBlog from './Components/Blogs/BranchAdminBlog.jsx';
 
-const main = () => {
-    const {user} = useContext(AuthContext);
-  return (
-    <div>
-
-    </div>
-  )
-}
-
-export default main
 
 const appRouter= createBrowserRouter(
     [

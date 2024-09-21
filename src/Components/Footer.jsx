@@ -19,7 +19,7 @@ const Footer = () => {
             <p className="ml-6">
                 &copy; Copy 2024 Rights Reserved
             </p>
-            <div className="block space-x-2 mt-2 text-center" data-aos="zoom-in">
+            <div className="block space-x-4 mt-2 text-center">
                 <a href="#">Facebook</a>
                 <a href="#">Twitter</a>
                 <a href="#">LinkedIn</a>

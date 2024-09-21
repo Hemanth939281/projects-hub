@@ -4,6 +4,8 @@ import Footer from "./Components/Footer";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
+import {Toaster} from "react-hot-toast";
+
 const App = () => {
   useEffect(()=>{
     AOS.init({
@@ -12,11 +14,11 @@ const App = () => {
     });
   },[])
   return (
-    <div className='Applayout overflow-x-hidden'>
+    <div className='Applayout font-roboto'>
       <Header/>
       <Body/>
       <Footer/>
-      
+      <Toaster position="top-center" />
     </div>
   )
 }

@@ -7,6 +7,7 @@ import FormikControl from '../FormikControl';
 import { useContext } from 'react';
 import AuthContext from '../AuthContext';
 import CloseIcon from '@mui/icons-material/Close';
+import toast from 'react-hot-toast';
 
 const initialValues = {
   collegename: '',
@@ -34,17 +35,17 @@ const InstituteLogin = () => {
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
-        alert("Login successful");
         console.log(role);
         closeInstituteModal();
         login({ role: role, collegename: collegename, email: email });
         navigate("/services");
+        toast.success("Login Successful");
       } else {
-        alert("Invalid credentials");
+        toast.error("Invalid credentials");
       }
     } catch (error) {
       console.error("Error logging in: ", error);
-      alert("Error logging in");
+      toast.error("Error logging in");
     }
     resetForm();
     setSubmitting(false);
