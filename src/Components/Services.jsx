@@ -12,7 +12,6 @@ import { Formik, Form, } from 'formik';
 import FormikControl from './FormikControl';
 import * as Yup from "yup"
 import ideaSubmissionPhoto from '../assets/ideaSubmissionPhoto.png'
-import toast from 'react-hot-toast';
 
 const Services = () => {
   const { user, showDeleteAdminModal, openDeleteAdminModal, closeDeleteAdminModal, showBranchAdminModal, openBranchAdminModal, closeBranchAdminModal,openModal, closeModal, showModal} = useContext(AuthContext);
@@ -23,6 +22,12 @@ const Services = () => {
       navigate('/services')
     }
   }, [user,navigate]);
+
+  const [projects, setProjects] = useState([]);
+  const [vacancies, setVacancies] = useState([]);
+  const [newProject, setNewProject] = useState({ name: '', stack: '', members: '' });
+  const [newVacancy, setNewVacancy] = useState({ projectTitle: '', stack: '', contact: '', });
+  const [newUser, setNewUser] = useState({ email: '', password: '', role: 'student' });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,101 +47,74 @@ const Services = () => {
     fetchData();
   }, [user?.collegename]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!user?.collegename || !user?.branch) {
-          console.log("College name or branch is undefined");
-          return; 
-        }
-        const ideasColRef = collection(db, "colleges", user.collegename.trim(), "Branches", user.branch, "ideas");
-        console.log(ideasColRef.path)
-        const ideaSnapshot = await getDocs(ideasColRef);
-        console.log("Fetched ideas:", ideaSnapshot.docs.map(doc => doc.data()));
-         setIdeas(
-          ideaSnapshot.docs
-            .map(doc => ({ id: doc.id, ...doc.data() }))
-            .filter(idea => idea.status == "accepted")
-        );
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const handleAddProject = async () => {
+    const collegeDocRef = doc(db, "colleges", user.collegename);
+    const projectsRef = collection(collegeDocRef, 'projects');
+    if(!newProject.projectTitle || !newProject.stack || !newProject.contact) {
+      alert("Project details are required");
+      return;
+    }
+    const newProjectDoc = await addDoc(projectsRef, newProject);
+    setProjects([...projects, { id: newProjectDoc.id, ...newProject }]);
+    setNewProject({ name: '', stack: '', members: '' });
+  };
 
-    fetchData();
-  }, [user?.branch,user?.collegename, setIdeas]);
+  const handleDeleteProject = async (id) => {
+    const projectDoc = doc(db, "colleges", user.collegename, 'projects', id);
+    await deleteDoc(projectDoc);
+    setProjects(projects.filter(project => project.id !== id));
+  };
 
-  const ideasLength = ideas.length;
+  const handleAddVacancy = async () => {
+    const collegeDocRef = doc(db, "colleges", user.collegename);
+    const vacanciesRef = collection(collegeDocRef, 'vacancies');
+    if(!newVacancy.projectTitle || !newVacancy.stack || !newVacancy.contact) {
+      alert("Vacancy details are required");
+      return;
+    }
+    const newVacancyDoc = await addDoc(vacanciesRef, newVacancy);
+    setVacancies([...vacancies, { id: newVacancyDoc.id, ...newVacancy }]);
+    setNewVacancy({ projectTitle: '', stack: '', contact: '',vacancies: '' });
+  };
 
+  const handleDeleteVacancy = async (id) => {
+    const vacancyDoc = doc(db, "colleges", user.collegename, 'vacancies', id);
+    await deleteDoc(vacancyDoc);
+    setVacancies(vacancies.filter(vacancy => vacancy.id !== id));
+  };
 
-  // const handleAddProject = async () => {
-  //   const collegeDocRef = doc(db, "colleges", user.collegename);
-  //   const projectsRef = collection(collegeDocRef, 'projects');
-  //   if(!newProject.projectTitle || !newProject.stack || !newProject.contact) {
-  //     alert("Project details are required");
-  //     return;
-  //   }
-  //   const newProjectDoc = await addDoc(projectsRef, newProject);
-  //   setProjects([...projects, { id: newProjectDoc.id, ...newProject }]);
-  //   setNewProject({ name: '', stack: '', members: '' });
-  // };
-
-  // const handleDeleteProject = async (id) => {
-  //   const projectDoc = doc(db, "colleges", user.collegename, 'projects', id);
-  //   await deleteDoc(projectDoc);
-  //   setProjects(projects.filter(project => project.id !== id));
-  // };
-
-  // const handleAddVacancy = async () => {
-  //   const collegeDocRef = doc(db, "colleges", user.collegename);
-  //   const vacanciesRef = collection(collegeDocRef, 'vacancies');
-  //   if(!newVacancy.projectTitle || !newVacancy.stack || !newVacancy.contact) {
-  //     alert("Vacancy details are required");
-  //     return;
-  //   }
-  //   const newVacancyDoc = await addDoc(vacanciesRef, newVacancy);
-  //   setVacancies([...vacancies, { id: newVacancyDoc.id, ...newVacancy }]);
-  //   setNewVacancy({ projectTitle: '', stack: '', contact: '',vacancies: '' });
-  // };
-
-  // const handleDeleteVacancy = async (id) => {
-  //   const vacancyDoc = doc(db, "colleges", user.collegename, 'vacancies', id);
-  //   await deleteDoc(vacancyDoc);
-  //   setVacancies(vacancies.filter(vacancy => vacancy.id !== id));
-  // };
-
-  // const handleAddUser = async () => {
-  //   if (!newUser.email || !newUser.password || !newUser.role) {
-  //     alert("User details are required");
-  //     return;
-  //   }
+  const handleAddUser = async () => {
+    if (!newUser.email || !newUser.password || !newUser.role) {
+      alert("User details are required");
+      return;
+    }
   
-  //   const collegeDocRef = doc(db, "colleges", user.collegename);
-  //   const usersRef = collection(collegeDocRef, newUser.role === 'student' ? 'users' : 'admins');
-  //   const q = query(usersRef, where("email", "==", newUser.email));
+    const collegeDocRef = doc(db, "colleges", user.collegename);
+    const usersRef = collection(collegeDocRef, newUser.role === 'student' ? 'users' : 'admins');
+    const q = query(usersRef, where("email", "==", newUser.email));
     
-  //   try {
-  //     const querySnapshot = await getDocs(q);
+    try {
+      const querySnapshot = await getDocs(q);
   
-  //     if (!querySnapshot.empty) {
-  //       alert("User already exists");
-  //       return;
-  //     }
+      if (!querySnapshot.empty) {
+        alert("User already exists");
+        return;
+      }
   
-  //     const newUserDocRef = doc(usersRef);
-  //     await setDoc(newUserDocRef, {
-  //       email: newUser.email,
-  //       password: newUser.password,
-  //       role: newUser.role,
-  //     });
+      const newUserDocRef = doc(usersRef);
+      await setDoc(newUserDocRef, {
+        email: newUser.email,
+        password: newUser.password,
+        role: newUser.role,
+      });
   
-  //     setNewUser({ email: '', password: '', role: 'student' });
-  //     alert("User added successfully");
-  //   } catch (error) {
-  //     console.error("Error adding user: ", error);
-  //     alert("Failed to add user");
-  //   }
-  // };
+      setNewUser({ email: '', password: '', role: 'student' });
+      alert("User added successfully");
+    } catch (error) {
+      console.error("Error adding user: ", error);
+      alert("Failed to add user");
+    }
+  };
 
   const initialValues = {
     name: "",
@@ -153,33 +131,29 @@ const Services = () => {
     technologies: Yup.string().required("Technologies are required"),
     idea: Yup.string().required("Idea is required")
   })
-
+  //idea form submission
   const handleSubmit = async(values, {resetForm, setSubmitting}) =>{
-    try {
-        console.log("Form submitted", values);
-      if(values){
-        const ideaCollRef = collection(db, "colleges", user.collegename,'Branches',user.branch, 'ideas');
-        const newIdeaDocRef = doc(ideaCollRef); 
-        await setDoc(newIdeaDocRef, { 
-        name: values.name,
-        year: values.year,
-        skills: values.skills,
-        technologies: values.technologies,
-        idea: values.idea,
-        submittedBy: user.email,
-        createdAt: new Date(),
-        status: 'Pending'
-        });
-        toast.success("Idea submitted successfully");
-    }
-  } catch (error) {
-      toast.error("Error signing up");
+    console.log("Form submitted", values);
+    if(values){
+      const ideaCollRef = collection(db, "colleges", user.collegename,'Branches',user.branch, 'ideas');
+      const newIdeaDocRef = doc(ideaCollRef); 
+      await setDoc(newIdeaDocRef, { 
+      name: values.name,
+      year: values.year,
+      skills: values.skills,
+      technologies: values.technologies,
+      idea: values.idea,
+      submittedBy: user.email,
+      createdAt: new Date(),
+      status: 'Pending'
+});
+
+      alert("Idea submitted successfully");
     }
     resetForm();
     setSubmitting(false);
-  
+    closeModal();
   }
-
 
   if (!user) {
     return (
@@ -191,10 +165,9 @@ const Services = () => {
   if(user.role === "Institute admin"){
     return(
       <>
-      <div className=''>
-      <div className=' bg-[#04052E] h-[80vh]'>
+      <div className=' bg-[#04052E] p-10'>
           <h2 className="text-4xl font-bold mb-16 text-white text-center pt-10 mb-10">Manage Branch Admins</h2>
-          <div className='h-[80%] w-full flex flex-wrap gap-12 justify-center items-center pb-10'>
+          <div className='h-[100%] w-full flex flex-wrap gap-12 justify-center items-center pb-10'>
                 <div className="bg-white p-4 md:px-8 rounded-lg shadow-lg text-black text-center">
                   <h3 className="text-2xl font-semibold mb-2 text-indigo-700">Add New Admin</h3>
           <button className=" py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{openBranchAdminModal()}}>
@@ -233,7 +206,6 @@ const Services = () => {
               }
           </div>
         </div>
-        </div>
       </>
     )
   }
@@ -255,21 +227,19 @@ const Services = () => {
     return (
       <div className='w-full bg-[#04052E]'>
       <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-bold mb-6 text-white text-center">Services</h1>
             <div className="mb-6">
-              <h2 className="text-3xl font-semibold my-8 text-white">Ongoing Projects</h2>
+              <h2 className="text-3xl font-semibold my-8 text-white">Projects</h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {currentPageIdeas.map((idea, index) => (
-                  <div key={index} className="flex  flex-col bg-white p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300 z-10">
-                    <h3 className="text-lg font-semibold text-blue-700">{idea.idea}</h3>
-                    <p className="text-gray-700 mt-2"><span className="font-semibold text-indigo-600">Team lead:</span> {idea.name}</p>
-                    <p className="text-gray-700"><span className="font-semibold text-indigo-600">skills required:</span> {idea.technologies}</p>
-                    <button className="bg-red-500 text-white p-2 rounded mt-4" onClick={()=>handleJoinTeam(idea.id)}>Join Team</button>
+                {projects.map((project, index) => (
+                  <div key={index} className="bg-white p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300 z-10">
+                    <h3 className="text-2xl font-semibold text-blue-700">{project.name}</h3>
+                    <p className="text-gray-700 mt-2"><span className="font-semibold text-indigo-600">Stack:</span> {project.stack}</p>
+                    <p className="text-gray-700"><span className="font-semibold text-indigo-600">Members:</span> {project.members}</p>
                   </div>
                 ))}
               </div>
-              <Pagination totalIdeas={ideasLength} ideasPerPage={ideasPerPage} setcurrentPage={setcurrentPage}/>
             </div>
-            <div className="mb-16">
             <div className="mb-16">
               <h2 className="text-3xl font-semibold my-8 text-white">Vacancies</h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -282,11 +252,11 @@ const Services = () => {
                 ))}
               </div>
             </div>
-            <div className='w-full h-[60vh] text-white my-16'>
+            <div className='w-full text-white md:my-16 p-5'>
             <h1 className='text-3xl font-semibold my-8 text-white text-center mb-16'>Idea Submission</h1>
-                <div className='flex items-center justify-center gap-x-48'>
-                  <img src={ideaSubmissionPhoto} alt="photoBesideForm" className='w-76 h-72 rounded-lg border-2 border-white'/>
-                  <div className='w-1/3 text-center'>
+                <div className='flex flex-col md:flex-row items-center justify-center gap-x-48'>
+                  <img src={ideaSubmissionPhoto} alt="photoBesideForm" className='md:w-1/3 rounded-lg border-2 border-white'/>
+                  <div className='mt-4 md:w-2/3 text-center'>
                 <h1>A single idea, the sudden flash of a thought, may be worth a million dollars</h1>
                 <button onClick={()=>{openModal()}} className='p-2 my-16 border-2 border-white rounded-md hover:bg-blue-500 hover:text-white hover:font-bold'>Submit Idea</button>
                 </div>
@@ -294,7 +264,7 @@ const Services = () => {
               </div>
             { showModal && 
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="relative w-full max-w-xl bg-[#04052E] rounded-lg shadow-lg p-8 text-white max-h-[100vh]">
+            <div className="relative w-full max-w-xl bg-[#04052E] rounded-lg shadow-lg p-8 text-white h-[95vh] overflow-y-auto">
             <button onClick={()=>{closeModal()}} className="absolute top-4 right-4 text-white">
               <    CloseIcon />
                  </button>
@@ -322,8 +292,6 @@ const Services = () => {
                    </div>
                    </div>
                    </div>
-                   </div>
-                    }
                    </div>
                     }
                    </div>
@@ -506,6 +474,6 @@ const Services = () => {
       )}
     </div>
   );
-}
+};
 
 export default Services;
