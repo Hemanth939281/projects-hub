@@ -24,12 +24,6 @@ const Services = () => {
     }
   }, [user,navigate]);
 
-  const [projects, setProjects] = useState([]);
-  const [vacancies, setVacancies] = useState([]);
-  const [newProject, setNewProject] = useState({ name: '', stack: '', members: '' });
-  const [newVacancy, setNewVacancy] = useState({ projectTitle: '', stack: '', contact: '', });
-  const [newUser, setNewUser] = useState({ email: '', password: '', role: 'student' });
-
   useEffect(() => {
     const fetchData = async () => {
       if (!user?.collegename) return;
@@ -48,74 +42,101 @@ const Services = () => {
     fetchData();
   }, [user?.collegename]);
 
-  const handleAddProject = async () => {
-    const collegeDocRef = doc(db, "colleges", user.collegename);
-    const projectsRef = collection(collegeDocRef, 'projects');
-    if(!newProject.projectTitle || !newProject.stack || !newProject.contact) {
-      alert("Project details are required");
-      return;
-    }
-    const newProjectDoc = await addDoc(projectsRef, newProject);
-    setProjects([...projects, { id: newProjectDoc.id, ...newProject }]);
-    setNewProject({ name: '', stack: '', members: '' });
-  };
-
-  const handleDeleteProject = async (id) => {
-    const projectDoc = doc(db, "colleges", user.collegename, 'projects', id);
-    await deleteDoc(projectDoc);
-    setProjects(projects.filter(project => project.id !== id));
-  };
-
-  const handleAddVacancy = async () => {
-    const collegeDocRef = doc(db, "colleges", user.collegename);
-    const vacanciesRef = collection(collegeDocRef, 'vacancies');
-    if(!newVacancy.projectTitle || !newVacancy.stack || !newVacancy.contact) {
-      alert("Vacancy details are required");
-      return;
-    }
-    const newVacancyDoc = await addDoc(vacanciesRef, newVacancy);
-    setVacancies([...vacancies, { id: newVacancyDoc.id, ...newVacancy }]);
-    setNewVacancy({ projectTitle: '', stack: '', contact: '',vacancies: '' });
-  };
-
-  const handleDeleteVacancy = async (id) => {
-    const vacancyDoc = doc(db, "colleges", user.collegename, 'vacancies', id);
-    await deleteDoc(vacancyDoc);
-    setVacancies(vacancies.filter(vacancy => vacancy.id !== id));
-  };
-
-  const handleAddUser = async () => {
-    if (!newUser.email || !newUser.password || !newUser.role) {
-      alert("User details are required");
-      return;
-    }
-  
-    const collegeDocRef = doc(db, "colleges", user.collegename);
-    const usersRef = collection(collegeDocRef, newUser.role === 'student' ? 'users' : 'admins');
-    const q = query(usersRef, where("email", "==", newUser.email));
-    
-    try {
-      const querySnapshot = await getDocs(q);
-  
-      if (!querySnapshot.empty) {
-        alert("User already exists");
-        return;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!user?.collegename || !user?.branch) {
+          console.log("College name or branch is undefined");
+          return; 
+        }
+        const ideasColRef = collection(db, "colleges", user.collegename.trim(), "Branches", user.branch, "ideas");
+        console.log(ideasColRef.path)
+        const ideaSnapshot = await getDocs(ideasColRef);
+        console.log("Fetched ideas:", ideaSnapshot.docs.map(doc => doc.data()));
+         setIdeas(
+          ideaSnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }))
+            .filter(idea => idea.status == "accepted")
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
+    };
+
+    fetchData();
+  }, [user?.branch,user?.collegename, setIdeas]);
+
+  const ideasLength = ideas.length;
+
+
+  // const handleAddProject = async () => {
+  //   const collegeDocRef = doc(db, "colleges", user.collegename);
+  //   const projectsRef = collection(collegeDocRef, 'projects');
+  //   if(!newProject.projectTitle || !newProject.stack || !newProject.contact) {
+  //     alert("Project details are required");
+  //     return;
+  //   }
+  //   const newProjectDoc = await addDoc(projectsRef, newProject);
+  //   setProjects([...projects, { id: newProjectDoc.id, ...newProject }]);
+  //   setNewProject({ name: '', stack: '', members: '' });
+  // };
+
+  // const handleDeleteProject = async (id) => {
+  //   const projectDoc = doc(db, "colleges", user.collegename, 'projects', id);
+  //   await deleteDoc(projectDoc);
+  //   setProjects(projects.filter(project => project.id !== id));
+  // };
+
+  // const handleAddVacancy = async () => {
+  //   const collegeDocRef = doc(db, "colleges", user.collegename);
+  //   const vacanciesRef = collection(collegeDocRef, 'vacancies');
+  //   if(!newVacancy.projectTitle || !newVacancy.stack || !newVacancy.contact) {
+  //     alert("Vacancy details are required");
+  //     return;
+  //   }
+  //   const newVacancyDoc = await addDoc(vacanciesRef, newVacancy);
+  //   setVacancies([...vacancies, { id: newVacancyDoc.id, ...newVacancy }]);
+  //   setNewVacancy({ projectTitle: '', stack: '', contact: '',vacancies: '' });
+  // };
+
+  // const handleDeleteVacancy = async (id) => {
+  //   const vacancyDoc = doc(db, "colleges", user.collegename, 'vacancies', id);
+  //   await deleteDoc(vacancyDoc);
+  //   setVacancies(vacancies.filter(vacancy => vacancy.id !== id));
+  // };
+
+  // const handleAddUser = async () => {
+  //   if (!newUser.email || !newUser.password || !newUser.role) {
+  //     alert("User details are required");
+  //     return;
+  //   }
   
-      const newUserDocRef = doc(usersRef);
-      await setDoc(newUserDocRef, {
-        email: newUser.email,
-        password: newUser.password,
-        role: newUser.role,
-      });
+  //   const collegeDocRef = doc(db, "colleges", user.collegename);
+  //   const usersRef = collection(collegeDocRef, newUser.role === 'student' ? 'users' : 'admins');
+  //   const q = query(usersRef, where("email", "==", newUser.email));
+    
+  //   try {
+  //     const querySnapshot = await getDocs(q);
   
-      setNewUser({ email: '', password: '', role: 'student' });
-      alert("User added successfully");
-    } catch (error) {
-      console.error("Error adding user: ", error);
-      alert("Failed to add user");
-    }
-  };
+  //     if (!querySnapshot.empty) {
+  //       alert("User already exists");
+  //       return;
+  //     }
+  
+  //     const newUserDocRef = doc(usersRef);
+  //     await setDoc(newUserDocRef, {
+  //       email: newUser.email,
+  //       password: newUser.password,
+  //       role: newUser.role,
+  //     });
+  
+  //     setNewUser({ email: '', password: '', role: 'student' });
+  //     alert("User added successfully");
+  //   } catch (error) {
+  //     console.error("Error adding user: ", error);
+  //     alert("Failed to add user");
+  //   }
+  // };
 
   const initialValues = {
     name: "",
@@ -158,6 +179,7 @@ const Services = () => {
     setSubmitting(false);
   
   }
+
 
   if (!user) {
     return (
@@ -233,19 +255,21 @@ const Services = () => {
     return (
       <div className='w-full bg-[#04052E]'>
       <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold mb-6 text-white text-center">Services</h1>
             <div className="mb-6">
-              <h2 className="text-3xl font-semibold my-8 text-white">Projects</h2>
+              <h2 className="text-3xl font-semibold my-8 text-white">Ongoing Projects</h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {projects.map((project, index) => (
-                  <div key={index} className="bg-white p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300 z-10">
-                    <h3 className="text-2xl font-semibold text-blue-700">{project.name}</h3>
-                    <p className="text-gray-700 mt-2"><span className="font-semibold text-indigo-600">Stack:</span> {project.stack}</p>
-                    <p className="text-gray-700"><span className="font-semibold text-indigo-600">Members:</span> {project.members}</p>
+                {currentPageIdeas.map((idea, index) => (
+                  <div key={index} className="flex  flex-col bg-white p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300 z-10">
+                    <h3 className="text-lg font-semibold text-blue-700">{idea.idea}</h3>
+                    <p className="text-gray-700 mt-2"><span className="font-semibold text-indigo-600">Team lead:</span> {idea.name}</p>
+                    <p className="text-gray-700"><span className="font-semibold text-indigo-600">skills required:</span> {idea.technologies}</p>
+                    <button className="bg-red-500 text-white p-2 rounded mt-4" onClick={()=>handleJoinTeam(idea.id)}>Join Team</button>
                   </div>
                 ))}
               </div>
+              <Pagination totalIdeas={ideasLength} ideasPerPage={ideasPerPage} setcurrentPage={setcurrentPage}/>
             </div>
+            <div className="mb-16">
             <div className="mb-16">
               <h2 className="text-3xl font-semibold my-8 text-white">Vacancies</h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -298,6 +322,8 @@ const Services = () => {
                    </div>
                    </div>
                    </div>
+                   </div>
+                    }
                    </div>
                     }
                    </div>

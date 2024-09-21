@@ -14,7 +14,7 @@ const App = () => {
     });
   },[])
   return (
-    <div className='Applayout font-roboto'>
+    <div className='Applayout'>
       <Header/>
       <Body/>
       <Footer/>
