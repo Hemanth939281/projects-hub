@@ -53,7 +53,7 @@ import About from "./About";
 
 const Contact = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-purple-50 to-white py-16 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-purple-50 to-white py-16 px-4 overflow-hidden">
       <div className="max-w-7xl mx-auto relative">
         {/* Decorative Elements */}
         <div className="absolute inset-0 -z-10">
