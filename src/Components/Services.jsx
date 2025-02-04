@@ -165,9 +165,9 @@ const Services = () => {
   if(user.role === "Institute admin"){
     return(
       <>
-      <div className=' bg-[#04052E] p-10'>
-          <h2 className="text-4xl font-bold mb-16 text-white text-center pt-10 mb-10">Manage Branch Admins</h2>
-          <div className='h-[100%] w-full flex flex-wrap gap-12 justify-center items-center pb-10'>
+      <div className=' bg-[#04052E] p-10 h-[80vh]'>
+          <h2 className="text-4xl font-bold mb-4 text-white text-center pt-16">Manage Branch Admins</h2>
+          <div className='mt-24 w-full flex flex-wrap gap-12 justify-center items-center'>
                 <div className="bg-white p-4 md:px-8 rounded-lg shadow-lg text-black text-center">
                   <h3 className="text-2xl font-semibold mb-2 text-indigo-700">Add New Admin</h3>
           <button className=" py-2 px-4 bg-white font-bold rounded-full focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-green-500" onClick={()=>{openBranchAdminModal()}}>
@@ -264,7 +264,7 @@ const Services = () => {
               </div>
             { showModal && 
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="relative w-full max-w-xl bg-[#04052E] rounded-lg shadow-lg p-8 text-white h-[95vh] overflow-y-auto">
+            <div className="relative w-full max-w-xl bg-[#04052E] rounded-lg shadow-lg p-8 text-white h-[95vh] overflow-hidden">
             <button onClick={()=>{closeModal()}} className="absolute top-4 right-4 text-white">
               <    CloseIcon />
                  </button>
